@@ -1,0 +1,12 @@
+Package: dropcaches
+Version: 1.0
+Section: security 
+Priority: optional
+Architecture: all
+Installed-Size: 5
+Maintainer: marc.weidler@web.de
+Provides: dropcaches
+Description: dropcaches clears all file system caches of the system, including inodes.
+ .
+ This tool should be used, if a backup (or similar) should beeing checked. It must run with root priviledges.
+

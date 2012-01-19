@@ -1,0 +1,7 @@
+# /etc/sudoers.d/dropcaches
+#
+# Enables dropcaches users to run the command
+# without entering the administrator password.
+
+%dropcaches ALL=(root) NOPASSWD: /usr/local/sbin/dropcaches
+

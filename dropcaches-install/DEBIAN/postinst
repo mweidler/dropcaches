@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+# Add a dropcaches group to the system and add all local users to this group.
+#
+# Marc Weidler, January 2012
+#
+#set -x
+#set -u
+
+
+###########################################################################
+# quit
+#
+# Log exit message and exit.
+#
+function quit {
+  echo "Leaving dropcaches post installation script."
+  exit $1
+}
+
+
+#
+# Check root privileges.
+#
+echo "Entering dropcaches installation script."
+if [[ $EUID -ne 0 ]]
+then
+  echo "This script can only be ran as root."
+  quit 1
+fi
+
+
+#
+# Add a group named "dropcaches", if not already existing.
+#
+GROUPEXISTS=`grep dropcaches /etc/group | wc -l`
+if [[ $GROUPEXISTS == 0 ]]
+then
+  groupadd dropcaches
+  if [[ $? == 0 ]]
+  then
+    echo "Group 'dropcaches' added."
+  else
+    echo "Group 'dropcaches' could not added, rc=$?, exiting."
+    quit 0
+  fi
+else
+  echo "Group 'dropcaches' already exists, good."
+fi
+
+
+#
+# Add all users to the group "dropcaches".
+#
+ALLUSERS=`grep "/home" /etc/passwd | grep -v "/bin/false" | cut -d: -f1`
+for u in $ALLUSERS
+do
+  usermod -a -G dropcaches $u
+  if [[ $? == 0 ]]
+  then
+    echo "User '$u' added to group 'dropcaches'."
+  else
+    echo "User '$u' could not be added to group 'dropcaches', rc=$?."
+  fi
+done
+
+quit 0
+
